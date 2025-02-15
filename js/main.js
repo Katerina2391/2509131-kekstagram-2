@@ -63,23 +63,24 @@ const getUrlNumber = createIdGenerator();
 
 const getRandomArrayElement = (elements) => elements[getRandomInteger(0, elements.length - 1)];
 
-// Чтобы сделать CommentId уникальным числом, я хотела создавать его через функцию. Но почему-то это у меня не работает, не понимаю, где ошибка:
-// function getCommentId () {
-//   const previousValues = [];
+function createCommentId () {
+  const previousValues = [];
 
-//   return function () {
-//     let currentValue = Math.floor(Math.random() * 1000);
-//     while (previousValues.includes(currentValue)) {
-//       currentValue = Math.floor(Math.random() * 1000);
-//     }
-//     previousValues.push(currentValue);
-//     return currentValue;
-//   };
-// }
+  return function () {
+    let currentValue = Math.floor(Math.random() * 1000);
+    while (previousValues.includes(currentValue)) {
+      currentValue = Math.floor(Math.random() * 1000);
+    }
+    previousValues.push(currentValue);
+    return currentValue;
+  };
+}
+
+const getCommentId = createCommentId();
 
 function getComment () {
   return {
-    CommentId: Math.floor(Math.random() * 1000),
+    CommentId: getCommentId(),
     avatar: `img/avatar-${ getRandomInteger(1, 6) }.svg`,
     message: getRandomArrayElement(MESSAGES),
     name: getRandomArrayElement(COMMENTATOR_NAMES)
